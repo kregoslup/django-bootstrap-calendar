@@ -19,6 +19,7 @@ class CalendarEvent(models.Model):
         ('event-special', _('Special')),
         ('event-important', _('Important')),
     )
+    hash = models.UUIDField(blank=False, null=False, unique=False, db_index=True)
     title = models.CharField(max_length=255, verbose_name=_('Title'))
     url = models.URLField(verbose_name=_('URL'), null=True, blank=True)
     type = models.CharField(blank=True, max_length=20, verbose_name=_('CSS Class'),
@@ -27,19 +28,5 @@ class CalendarEvent(models.Model):
     end = models.DateTimeField(verbose_name=_('End Date'), null=True,
                                blank=True)
 
-    @property
-    def start_timestamp(self):
-        """
-        Return start date as timestamp
-        """
-        return datetime_to_timestamp(self.start)
-
-    @property
-    def end_timestamp(self):
-        """
-        Return end date as timestamp
-        """
-        return datetime_to_timestamp(self.end)
-
-    def __unicode__(self):
+    def __str__(self):
         return self.title
