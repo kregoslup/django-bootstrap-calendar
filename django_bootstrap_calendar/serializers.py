@@ -1,28 +1,14 @@
 # -*- coding: utf-8 -*-
+from rest_framework import serializers
+
+from django_bootstrap_calendar.models import CalendarEvent
+
 __author__ = 'sandlbn'
 
-import json
-from django.db.models.query import QuerySet
 
+class EventSerializer(serializers.ModelSerializer):
+    length = serializers.CharField(source='event_length')
 
-def event_serializer(events):
-    """
-    serialize event model
-    """
-    objects_body = []
-
-    if isinstance(events, QuerySet):
-        for event in events:
-            field = {
-                "id": event.pk,
-                "title": event.title,
-                "url": event.url,
-                "class": event.css_class,
-                "start": event.start_timestamp,
-                "end": event.end_timestamp
-            }
-            objects_body.append(field)
-
-    objects_head = {"success": 1}
-    objects_head["result"] = objects_body
-    return json.dumps(objects_head)
+    class Meta:
+        model = CalendarEvent
+        fields = ('hash', 'title', 'url', 'type', 'start', 'end', 'length')
